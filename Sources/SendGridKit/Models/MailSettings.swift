@@ -1,6 +1,6 @@
 import Foundation
 
-public struct MailSettings: Encodable {
+public struct MailSettings: Codable {
     /// This allows you to have a blind carbon copy automatically sent to the specified email address for every email that is sent.
     public var bcc: BCC?
     
@@ -44,9 +44,18 @@ public struct MailSettings: Encodable {
         try container.encode(sandboxMode, forKey: .sandboxMode)
         try container.encode(spamCheck, forKey: .spamCheck)
     }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        bcc = try container.decodeIfPresent(BCC.self, forKey: .bcc)
+        bypassListManagement = try container.decodeIfPresent(BypassListManagement.self, forKey: .bypassListManagement)
+        footer = try container.decodeIfPresent(Footer.self, forKey: .footer)
+        sandboxMode = try container.decodeIfPresent(SandboxMode.self, forKey: .sandboxMode)
+        spamCheck = try container.decodeIfPresent(SpamCheck.self, forKey: .spamCheck)
+    }
 }
 
-public struct BCC: Encodable {
+public struct BCC: Codable {
     /// Indicates if this setting is enabled.
     public var enable: Bool?
     public var email: String?
@@ -58,7 +67,7 @@ public struct BCC: Encodable {
     }
 }
 
-public struct BypassListManagement: Encodable {
+public struct BypassListManagement: Codable {
     /// Indicates if this setting is enabled.
     public var enable: Bool?
     
@@ -67,7 +76,7 @@ public struct BypassListManagement: Encodable {
     }
 }
 
-public struct Footer: Encodable {
+public struct Footer: Codable {
     /// Indicates if this setting is enabled.
     public var enable: Bool?
     
@@ -86,7 +95,7 @@ public struct Footer: Encodable {
     }
 }
 
-public struct SandboxMode: Encodable {
+public struct SandboxMode: Codable {
     /// Indicates if this setting is enabled.
     public var enable: Bool?
     
@@ -95,7 +104,7 @@ public struct SandboxMode: Encodable {
     }
 }
 
-public struct SpamCheck: Encodable {
+public struct SpamCheck: Codable {
     /// Indicates if this setting is enabled.
     public var enable: Bool?
     
@@ -124,6 +133,13 @@ public struct SpamCheck: Encodable {
         try container.encode(enable, forKey: .enable)
         try container.encode(threshold, forKey: .threshold)
         try container.encode(postToUrl, forKey: .postToUrl)
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        enable = try container.decodeIfPresent(Bool.self, forKey: .enable)
+        threshold = try container.decodeIfPresent(Int.self, forKey: .threshold)
+        postToUrl = try container.decodeIfPresent(String.self, forKey: .postToUrl)
     }
 
 }

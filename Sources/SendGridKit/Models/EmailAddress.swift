@@ -1,6 +1,6 @@
 import Foundation
 
-public struct EmailAddress: Encodable {
+public struct EmailAddress: Codable {
     /// format: email
     public var email: String
     

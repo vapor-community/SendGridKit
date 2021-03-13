@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct EmailAttachment: Encodable {
+public struct EmailAttachment: Codable {
     
     /// The Base64 encoded content of the attachment.
     public var content: String
@@ -51,5 +51,14 @@ public struct EmailAttachment: Encodable {
         try container.encode(filename, forKey: .filename)
         try container.encode(disposition, forKey: .disposition)
         try container.encode(contentId, forKey: .contentId)
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        content = try container.decode(String.self, forKey: .content)
+        type = try container.decodeIfPresent(String.self, forKey: .type)
+        filename = try container.decode(String.self, forKey: .filename)
+        disposition = try container.decodeIfPresent(String.self, forKey: .disposition)
+        contentId = try container.decodeIfPresent(String.self, forKey: .contentId)
     }
 }

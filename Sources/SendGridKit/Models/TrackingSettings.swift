@@ -1,6 +1,6 @@
 import Foundation
 
-public struct TrackingSettings: Encodable {
+public struct TrackingSettings: Codable {
     /// Allows you to track whether a recipient clicked a link in your email.
     public var clickTracking: ClickTracking?
     
@@ -38,9 +38,16 @@ public struct TrackingSettings: Encodable {
         try container.encode(ganalytics, forKey: .ganalytics)
     }
     
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        clickTracking = try container.decodeIfPresent(ClickTracking.self, forKey: .clickTracking)
+        openTracking = try container.decodeIfPresent(OpenTracking.self, forKey: .openTracking)
+        subscriptionTracking = try container.decodeIfPresent(SubscriptionTracking.self, forKey: .subscriptionTracking)
+        ganalytics = try container.decodeIfPresent(GoogleAnalytics.self, forKey: .ganalytics)
+    }
 }
 
-public struct ClickTracking: Encodable {
+public struct ClickTracking: Codable {
     /// Indicates if this setting is enabled.
     public var enable: Bool?
     
@@ -63,9 +70,15 @@ public struct ClickTracking: Encodable {
         try container.encode(enable, forKey: .enable)
         try container.encode(enableText, forKey: .enableText)
     }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        enable = try container.decodeIfPresent(Bool.self, forKey: .enable)
+        enableText = try container.decodeIfPresent(Bool.self, forKey: .enableText)
+    }
 }
 
-public struct OpenTracking: Encodable {
+public struct OpenTracking: Codable {
     /// Indicates if this setting is enabled.
     public var enable: Bool?
     
@@ -88,9 +101,15 @@ public struct OpenTracking: Encodable {
         try container.encode(enable, forKey: .enable)
         try container.encode(substitutionTag, forKey: .substitutionTag)
     }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        enable = try container.decodeIfPresent(Bool.self, forKey: .enable)
+        substitutionTag = try container.decodeIfPresent(String.self, forKey: .substitutionTag)
+    }
 }
 
-public struct SubscriptionTracking: Encodable {
+public struct SubscriptionTracking: Codable {
     /// Indicates if this setting is enabled.
     public var enable: Bool?
     
@@ -125,9 +144,17 @@ public struct SubscriptionTracking: Encodable {
         try container.encode(html, forKey: .html)
         try container.encode(substitutionTag, forKey: .substitutionTag)
     }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        enable = try container.decodeIfPresent(Bool.self, forKey: .enable)
+        text = try container.decodeIfPresent(String.self, forKey: .text)
+        html = try container.decodeIfPresent(String.self, forKey: .html)
+        substitutionTag = try container.decodeIfPresent(String.self, forKey: .substitutionTag)
+    }
 }
 
-public struct GoogleAnalytics: Encodable {
+public struct GoogleAnalytics: Codable {
     /// Indicates if this setting is enabled.
     public var enable: Bool?
     
@@ -177,4 +204,15 @@ public struct GoogleAnalytics: Encodable {
         try container.encode(utmContent, forKey: .utmContent)
         try container.encode(utmCampaign, forKey: .utmCampaign)
     }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        enable = try container.decodeIfPresent(Bool.self, forKey: .enable)
+        utmSource = try container.decodeIfPresent(String.self, forKey: .utmSource)
+        utmMedium = try container.decodeIfPresent(String.self, forKey: .utmMedium)
+        utmTerm = try container.decodeIfPresent(String.self, forKey: .utmTerm)
+        utmContent = try container.decodeIfPresent(String.self, forKey: .utmContent)
+        utmCampaign = try container.decodeIfPresent(String.self, forKey: .utmCampaign)
+    }
+    
 }
